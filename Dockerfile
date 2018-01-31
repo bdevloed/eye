@@ -3,7 +3,7 @@
 # The actual bdevloed/eye is built in the second stage
 
 # STAGE 1
-FROM swipl:stable as builder
+FROM swipl:latest as builder
 
 LABEL maintainer="https://github.com/bdevloed"
 
@@ -25,7 +25,7 @@ RUN git clone https://github.com/melgi/cturtle.git && \
 
 # STAGE 2
 # bdevloed/eye build starts here
-FROM swipl:stable
+FROM swipl:latest
 LABEL maintainer="https://github.com/bdevloed"
 
 # Install EYE:
