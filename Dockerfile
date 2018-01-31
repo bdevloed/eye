@@ -13,7 +13,7 @@ RUN apt-get -qq update && apt-get -qqy install build-essential git flex
 # cf https://github.com/melgi/carl/
 RUN git clone https://github.com/melgi/carl.git && \
 	cd carl && \
-	make maintainer-clean && make
+	make maintainer-clean && make install
 
 # Compile CTurtle:
 #    a tool for parsing RDF 1.1 Turtle files
@@ -21,7 +21,7 @@ RUN git clone https://github.com/melgi/carl.git && \
 # cf https://github.com/melgi/cturtle/
 RUN git clone https://github.com/melgi/cturtle.git && \
 	cd cturtle && \
-	make maintainer-clean && make
+	make maintainer-clean && make install
 
 # STAGE 2
 # bdevloed/eye build starts here
