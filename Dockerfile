@@ -1,19 +1,15 @@
-# This is a multi-stage build
-# The first stage compiles carl and cturtle binaries
-# The actual bdevloed/eye is built in the second stage
-
-# STAGE 1
-FROM swipl:latest as builder
+FROM swipl:stable as builder
 
 LABEL maintainer="https://github.com/bdevloed"
 
-RUN apt-get -qq update && apt-get -qqy install build-essential git flex
+RUN apt-get -qq update
+RUN apt-get -qqy install build-essential git flex
 
 # Compile Carl: Another Rule Language
 # cf https://github.com/melgi/carl/
 RUN git clone https://github.com/melgi/carl.git && \
 	cd carl && \
-	make maintainer-clean && make install
+	make maintainer-clean && make CXXFLAGS='-O2 -Wall'
 
 # Compile CTurtle:
 #    a tool for parsing RDF 1.1 Turtle files
@@ -21,17 +17,15 @@ RUN git clone https://github.com/melgi/carl.git && \
 # cf https://github.com/melgi/cturtle/
 RUN git clone https://github.com/melgi/cturtle.git && \
 	cd cturtle && \
-	make maintainer-clean && make install
+	make maintainer-clean && make CXXFLAGS='-O2 -Wall'
 
-# STAGE 2
-# bdevloed/eye build starts here
-FROM swipl:latest
+FROM swipl:stable
 LABEL maintainer="https://github.com/bdevloed"
 
 # Install EYE:
 # - Download EYE
 # - Verify integrity
-# - Install EYE (including cturtle and carl dependencies)
+# - Install EYE (including turtle parser)
 # - clean up temporary files
 
 COPY --from=builder /carl/carl /cturtle/cturtle /usr/local/bin/
@@ -46,9 +40,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -qq update && \
 
 RUN chmod +x /usr/local/bin/cturtle && \
 	chmod +x /usr/local/bin/carl && \
-  	echo "IyEvYmluL2Jhc2gKaWYgW1sgJCogPT0gKiItLWZlZXN0IiogXV0KdGhlbgogIGV4ZWMgbnlhbmNhdAplbHNlCiAgZXhlYyBleWUgIiRAIjsKZmkK" | base64 -d > /ep && \
+  echo "IyEvYmluL2Jhc2gKaWYgW1sgJCogPT0gKiItLWZlZXN0IiogXV0KdGhlbgogIGV4ZWMgbnlhbmNhdAplbHNlCiAgZXhlYyBleWUgIiRAIjsKZmkK" | base64 -d > /ep && \
 	chmod +x /ep && \
-  	mkdir eye && \
+  mkdir eye && \
 	cd eye && \
 	curl -fsS -L -O "https://raw.githubusercontent.com/josd/eye/master/eye.zip" && \
 	unzip eye && ./eye/install.sh && \
