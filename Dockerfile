@@ -1,4 +1,4 @@
-FROM swipl:stable as builder
+FROM swipl:latest as builder
 
 LABEL maintainer="https://github.com/bdevloed"
 
