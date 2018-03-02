@@ -19,7 +19,7 @@ RUN git clone https://github.com/melgi/cturtle.git && \
 	cd cturtle && \
 	make maintainer-clean && make CXXFLAGS='-O2 -Wall'
 
-FROM swipl:stable
+FROM swipl:latest
 LABEL maintainer="https://github.com/bdevloed"
 
 # Install EYE:
