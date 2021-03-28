@@ -46,7 +46,6 @@ RUN chmod +x /usr/local/bin/cturtle && \
 	cd eye && \
 	curl -fsS -L -O "https://raw.githubusercontent.com/josd/eye/master/eye.zip" && \
 	unzip eye && ./eye/install.sh && \
-	ln -s /opt/eye/bin/eye.sh /usr/local/bin/eye && \
 	cd / && \
 	rm -rf eye
 
